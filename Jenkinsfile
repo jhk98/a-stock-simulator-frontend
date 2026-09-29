@@ -73,7 +73,7 @@ pipeline {
                         aws ssm wait command-executed \
                             --command-id "$COMMAND_ID" \
                             --instance-id "i-037c1a8ae96b5d24c" \
-                            --region ap-northeast-2
+                            --region ap-northeast-2 || true
 
                         aws ssm get-command-invocation \
                             --command-id "$COMMAND_ID" \
