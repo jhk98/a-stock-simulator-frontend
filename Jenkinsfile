@@ -62,7 +62,7 @@ pipeline {
                                 "docker pull 784917519469.dkr.ecr.ap-northeast-2.amazonaws.com/a-stock-simulator-frontend:latest",
                                 "docker stop a-stock-simulator-frontend || true",
                                 "docker rm a-stock-simulator-frontend || true",
-                                "docker run -d --name a-stock-simulator-frontend --restart unless-stopped -p 80:80 784917519469.dkr.ecr.ap-northeast-2.amazonaws.com/a-stock-simulator-frontend:latest"
+                                "docker run -d --name a-stock-simulator-frontend --restart unless-stopped -p 3000:80 784917519469.dkr.ecr.ap-northeast-2.amazonaws.com/a-stock-simulator-frontend:latest"
                             ]' \
                             --region ap-northeast-2 \
                             --query 'Command.CommandId' \
@@ -73,7 +73,7 @@ pipeline {
                         aws ssm wait command-executed \
                             --command-id "$COMMAND_ID" \
                             --instance-id "i-037c1a8ae96b5d24c" \
-                            --region ap-northeast-2 || true
+                            --region ap-northeast-2
 
                         aws ssm get-command-invocation \
                             --command-id "$COMMAND_ID" \
