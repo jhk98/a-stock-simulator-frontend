@@ -1,0 +1,157 @@
+.signup-page {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 48px 24px;
+    background-color: #f8f9fb;
+}
+
+.signup-container {
+    width: 100%;
+    max-width: 480px;
+    padding: 40px;
+    background-color: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+}
+
+/* 로고 */
+.signup-logo {
+    display: block;
+    margin-bottom: 32px;
+    color: #2563eb;
+    font-size: 20px;
+    font-weight: 700;
+    text-align: center;
+    text-decoration: none;
+}
+
+/* 제목 */
+.signup-container h1 {
+    margin: 0 0 10px;
+    color: #111827;
+    font-size: 30px;
+    text-align: center;
+}
+
+/* 제목 아래 설명 */
+.signup-description {
+    margin: 0 0 32px;
+    color: #6b7280;
+    font-size: 15px;
+    text-align: center;
+}
+
+/* 회원가입 Form */
+.signup-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* 각 입력 영역 */
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.input-group label {
+    color: #374151;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.input-group input {
+    width: 100%;
+    height: 48px;
+    padding: 0 14px;
+
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+
+    background-color: #ffffff;
+    color: #111827;
+
+    font-size: 15px;
+    outline: none;
+
+    transition:
+            border-color 0.2s,
+            box-shadow 0.2s;
+}
+
+.input-group input::placeholder {
+    color: #9ca3af;
+}
+
+/* 입력창 선택 */
+.input-group input:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* 회원가입 버튼 */
+.signup-button {
+    width: 100%;
+    height: 50px;
+    margin-top: 8px;
+
+    border: none;
+    border-radius: 8px;
+
+    background-color: #2563eb;
+    color: #ffffff;
+
+    font-size: 16px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: background-color 0.2s;
+}
+
+.signup-button:hover {
+    background-color: #1d4ed8;
+}
+
+/* 하단 로그인 이동 영역 */
+.signup-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    margin-top: 28px;
+
+    color: #6b7280;
+    font-size: 14px;
+}
+
+.signup-footer a {
+    color: #2563eb;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.signup-footer a:hover {
+    text-decoration: underline;
+}
+
+/* 모바일 */
+@media (max-width: 500px) {
+    .signup-page {
+        padding: 24px 16px;
+    }
+
+    .signup-container {
+        padding: 32px 24px;
+    }
+
+    .signup-container h1 {
+        font-size: 26px;
+    }
+}
