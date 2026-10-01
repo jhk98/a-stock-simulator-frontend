@@ -1,73 +1,122 @@
+/* ==============================
+   Signup Page
+   ============================== */
+
 .signup-page {
     width: 100%;
     min-height: 100vh;
+
     display: flex;
     align-items: flex-start;
     justify-content: center;
+
     padding: 48px 24px;
+
     background-color: #f8f9fb;
 }
 
+
+/* ==============================
+   Signup Container
+   ============================== */
+
 .signup-container {
     width: 100%;
-    max-width: 480px;
+    max-width: 560px;
+
     padding: 40px;
+
     background-color: #ffffff;
+
     border: 1px solid #e5e7eb;
     border-radius: 16px;
+
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
 }
 
-/* 로고 */
+
+/* ==============================
+   Logo
+   ============================== */
+
 .signup-logo {
     display: block;
+
     margin-bottom: 32px;
+
     color: #2563eb;
+
     font-size: 20px;
     font-weight: 700;
     text-align: center;
     text-decoration: none;
 }
 
-/* 제목 */
+
+/* ==============================
+   Title
+   ============================== */
+
 .signup-container h1 {
     margin: 0 0 10px;
+
     color: #111827;
+
     font-size: 30px;
+    font-weight: 700;
     text-align: center;
 }
 
-/* 제목 아래 설명 */
 .signup-description {
     margin: 0 0 32px;
+
     color: #6b7280;
+
     font-size: 15px;
+    line-height: 1.6;
     text-align: center;
 }
 
-/* 회원가입 Form */
+
+/* ==============================
+   Signup Form
+   ============================== */
+
 .signup-form {
     display: flex;
     flex-direction: column;
+
     gap: 20px;
 }
 
-/* 각 입력 영역 */
+
+/* ==============================
+   Input Group
+   ============================== */
+
 .input-group {
     display: flex;
     flex-direction: column;
+
     gap: 8px;
 }
 
 .input-group label {
     color: #374151;
+
     font-size: 14px;
     font-weight: 600;
 }
 
+
+/* ==============================
+   Input
+   ============================== */
+
 .input-group input {
     width: 100%;
     height: 48px;
+
     padding: 0 14px;
 
     border: 1px solid #d1d5db;
@@ -77,27 +126,180 @@
     color: #111827;
 
     font-size: 15px;
+
     outline: none;
+
+    box-sizing: border-box;
 
     transition:
             border-color 0.2s,
-            box-shadow 0.2s;
+            box-shadow 0.2s,
+            background-color 0.2s;
 }
 
 .input-group input::placeholder {
     color: #9ca3af;
 }
 
-/* 입력창 선택 */
 .input-group input:focus {
     border-color: #2563eb;
+
     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
-/* 회원가입 버튼 */
+.input-group input:disabled {
+    background-color: #f3f4f6;
+    color: #6b7280;
+
+    cursor: not-allowed;
+}
+
+
+/* ==============================
+   Email
+   ============================== */
+
+.email-input-group {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+}
+
+.email-input-group input {
+    min-width: 0;
+}
+
+.email-input-group input:first-child {
+    flex: 1;
+}
+
+.email-input-group input:nth-of-type(2) {
+    flex: 1.2;
+}
+
+.email-at {
+    flex-shrink: 0;
+
+    color: #6b7280;
+
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.email-input-group select {
+    width: 125px;
+    height: 48px;
+
+    flex-shrink: 0;
+
+    padding: 0 12px;
+
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+
+    background-color: #ffffff;
+    color: #374151;
+
+    font-size: 14px;
+
+    outline: none;
+    cursor: pointer;
+
+    box-sizing: border-box;
+
+    transition:
+            border-color 0.2s,
+            box-shadow 0.2s;
+}
+
+.email-input-group select:focus {
+    border-color: #2563eb;
+
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+
+/* ==============================
+   Resident Registration Number
+   ============================== */
+
+.rgst-number-group {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+}
+
+.rgst-number-group input {
+    flex: 1;
+
+    min-width: 0;
+}
+
+.rgst-number-group span {
+    flex-shrink: 0;
+
+    color: #6b7280;
+
+    font-size: 16px;
+    font-weight: 500;
+}
+
+
+/* ==============================
+   Input Message
+   ============================== */
+
+.input-error,
+.password-mismatch {
+    margin: 2px 0 0;
+
+    color: #dc2626;
+
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+.password-match {
+    margin: 2px 0 0;
+
+    color: #16a34a;
+
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+
+/* ==============================
+   Signup Error
+   ============================== */
+
+.signup-error {
+    margin: -4px 0 0;
+
+    color: #dc2626;
+
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.5;
+}
+
+
+/* ==============================
+   Signup Button
+   ============================== */
+
 .signup-button {
     width: 100%;
     height: 50px;
+
     margin-top: 8px;
 
     border: none;
@@ -111,28 +313,41 @@
 
     cursor: pointer;
 
-    transition: background-color 0.2s;
+    transition:
+            background-color 0.2s,
+            transform 0.1s;
 }
 
 .signup-button:hover {
     background-color: #1d4ed8;
 }
 
-/* 하단 로그인 이동 영역 */
+.signup-button:active {
+    transform: translateY(1px);
+}
+
+
+/* ==============================
+   Signup Footer
+   ============================== */
+
 .signup-footer {
     display: flex;
     align-items: center;
     justify-content: center;
+
     gap: 8px;
 
     margin-top: 28px;
 
     color: #6b7280;
+
     font-size: 14px;
 }
 
 .signup-footer a {
     color: #2563eb;
+
     font-weight: 600;
     text-decoration: none;
 }
@@ -141,8 +356,13 @@
     text-decoration: underline;
 }
 
-/* 모바일 */
-@media (max-width: 500px) {
+
+/* ==============================
+   Responsive
+   ============================== */
+
+@media (max-width: 600px) {
+
     .signup-page {
         padding: 24px 16px;
     }
@@ -153,5 +373,21 @@
 
     .signup-container h1 {
         font-size: 26px;
+    }
+
+    .email-input-group {
+        flex-wrap: wrap;
+    }
+
+    .email-input-group input:first-child {
+        flex: 1;
+    }
+
+    .email-input-group input:nth-of-type(2) {
+        flex: 1;
+    }
+
+    .email-input-group select {
+        width: 100%;
     }
 }

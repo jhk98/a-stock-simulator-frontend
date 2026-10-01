@@ -1,7 +1,19 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './MainPage.css';
 
 function MainPage() {
+
+    const [loginUser, setLoginUser] = useState(() => {
+        const savedUser = localStorage.getItem('loginUser');
+        return savedUser ? JSON.parse(savedUser) : null;
+    });
+
+    const handleLogout = () => {
+        localStorage.removeItem('loginUser');
+        setLoginUser(null);
+    };
+
     return (
         <div className="main-page">
 
@@ -12,54 +24,50 @@ function MainPage() {
                     </div>
 
                     <nav className="navigation">
-                        <a href="#">주식</a>
-                        <a href="#">투자내역</a>
-                        <Link to="/login">로그인</Link>
+                        {loginUser ? (
+                            <>
+                                <span>
+                                    {loginUser.name}님
+                                </span>
+
+                                <button
+                                    className="logout-button"
+                                    onClick={handleLogout}
+                                >
+                                    로그아웃
+                                </button>
+                            </>
+                        ) : (
+                            <>
+                                <Link to="/login">
+                                    로그인
+                                </Link>
+
+                                <Link to="/signup">
+                                    회원가입
+                                </Link>
+                            </>
+                        )}
                     </nav>
                 </div>
             </header>
 
             <main>
-                <section className="hero">
-                    <h1>실전처럼 시작하는 모의 주식 투자</h1>
+                <section className="main-intro">
+                    <div className="main-intro-content">
+                        <p className="main-intro-label">STOCK SIMULATOR</p>
 
-                    <p>
-                        실제 주식 데이터를 기반으로
-                        부담 없이 투자 경험을 쌓아보세요.
-                    </p>
+                        <h1>
+                            투자 경험을 쌓는
+                            <br />
+                            가장 쉬운 방법
+                        </h1>
 
-                    <button type="button">
-                        모의투자 시작하기
-                    </button>
-                </section>
-
-                <section className="stocks">
-                    <h2>주요 종목</h2>
-
-                    <div className="stock-list">
-                        <div className="stock-card">
-                            <h3>삼성전자</h3>
-                            <strong>71,200원</strong>
-                            <span>+1.24%</span>
-                        </div>
-
-                        <div className="stock-card">
-                            <h3>SK하이닉스</h3>
-                            <strong>184,500원</strong>
-                            <span>-0.32%</span>
-                        </div>
-
-                        <div className="stock-card">
-                            <h3>NAVER</h3>
-                            <strong>215,000원</strong>
-                            <span>+2.10%</span>
-                        </div>
-
-                        <div className="stock-card">
-                            <h3>카카오</h3>
-                            <strong>42,300원</strong>
-                            <span>+0.54%</span>
-                        </div>
+                        <p className="main-intro-description">
+                            실제 주식 시장을 기반으로
+                            <br />
+                            부담 없이 투자를 시작해보세요.
+                        </p>
                     </div>
                 </section>
 
