@@ -4,6 +4,7 @@
 
 .main-page {
     min-height: 100vh;
+
     background-color: #f8f9fb;
     color: #1f2937;
 }
@@ -19,38 +20,60 @@
 }
 
 .header-inner {
+    width: 100%;
     max-width: 1200px;
     height: 70px;
+
     margin: 0 auto;
     padding: 0 24px;
 
     display: flex;
     align-items: center;
     justify-content: space-between;
+
+    box-sizing: border-box;
 }
 
 .logo {
+    color: #111827;
+
     font-size: 20px;
     font-weight: 700;
-    color: #111827;
+    text-decoration: none;
 }
 
 .navigation {
     display: flex;
     align-items: center;
+
     gap: 32px;
 }
 
 .navigation a {
     color: #4b5563;
-    text-decoration: none;
+
     font-size: 15px;
     font-weight: 500;
+    text-decoration: none;
+
+    transition: color 0.2s;
 }
 
 .navigation a:hover {
     color: #111827;
 }
+
+.user-name {
+    color: #374151;
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+
+/* ==============================
+   Logout Button
+   ============================== */
 
 .logout-button {
     padding: 9px 16px;
@@ -82,12 +105,14 @@
     background-color: #e5e7eb;
 }
 
+
 /* ==============================
    Main Intro
    ============================== */
 
 .main-intro {
     min-height: 400px;
+
     padding: 70px 24px;
 
     display: flex;
@@ -107,34 +132,35 @@
 .main-intro-label {
     margin: 0 0 20px;
 
+    color: #3182f6;
+
     font-size: 15px;
     font-weight: 700;
     letter-spacing: 1.5px;
-
-    color: #3182f6;
 }
 
 .main-intro h1 {
     margin: 0;
 
+    color: #191f28;
+
     font-size: 56px;
     font-weight: 800;
     line-height: 1.25;
     letter-spacing: -2px;
-
-    color: #191f28;
 }
 
 .main-intro-description {
     margin: 28px 0 0;
 
+    color: #6b7684;
+
     font-size: 20px;
     font-weight: 400;
     line-height: 1.7;
     letter-spacing: -0.4px;
-
-    color: #6b7684;
 }
+
 
 /* ==============================
    Features
@@ -148,18 +174,22 @@
 
 .features > h2 {
     max-width: 1200px;
+
     margin: 0 auto 28px;
 
-    font-size: 28px;
     color: #111827;
+
+    font-size: 28px;
 }
 
 .feature-list {
     max-width: 1200px;
+
     margin: 0 auto;
 
     display: grid;
     grid-template-columns: repeat(3, 1fr);
+
     gap: 20px;
 }
 
@@ -175,14 +205,610 @@
 .feature-list h3 {
     margin: 0 0 12px;
 
-    font-size: 20px;
     color: #111827;
+
+    font-size: 20px;
 }
 
 .feature-list p {
     margin: 0;
 
+    color: #6b7280;
+
     font-size: 15px;
     line-height: 1.6;
+}
+
+
+/* =========================================================
+   Dashboard
+   로그인 후 메인 화면
+   ========================================================= */
+
+.dashboard {
+    width: 100%;
+    max-width: 1200px;
+
+    margin: 0 auto;
+    padding: 56px 24px 80px;
+
+    box-sizing: border-box;
+}
+
+
+/* ==============================
+   Dashboard Section
+   ============================== */
+
+.dashboard-section {
+    margin-bottom: 56px;
+}
+
+.dashboard-section:last-child {
+    margin-bottom: 0;
+}
+
+.dashboard-section h1 {
+    margin: 0 0 28px;
+
+    color: #111827;
+
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+.dashboard-section h2 {
+    margin: 0;
+
+    color: #111827;
+
+    font-size: 22px;
+    font-weight: 700;
+}
+
+
+/* ==============================
+   Asset Summary
+   ============================== */
+
+.asset-summary {
+    padding: 32px;
+
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+
+    background-color: #ffffff;
+
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+}
+
+
+/* ==============================
+   Total Asset
+   ============================== */
+
+.total-asset {
+    display: flex;
+    flex-direction: column;
+
+    gap: 8px;
+
+    margin-bottom: 32px;
+}
+
+.total-asset span {
     color: #6b7280;
+
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.total-asset strong {
+    color: #111827;
+
+    font-size: 36px;
+    font-weight: 700;
+    letter-spacing: -1px;
+}
+
+
+/* ==============================
+   Asset Detail
+   ============================== */
+
+.asset-detail {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 24px;
+
+    padding-top: 24px;
+
+    border-top: 1px solid #e5e7eb;
+}
+
+.asset-detail > div {
+    display: flex;
+    flex-direction: column;
+
+    gap: 8px;
+}
+
+.asset-detail span {
+    color: #6b7280;
+
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.asset-detail strong {
+    color: #111827;
+
+    font-size: 18px;
+    font-weight: 600;
+}
+
+
+/* ==============================
+   Section Header
+   ============================== */
+
+.section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 20px;
+}
+
+.section-header button {
+    padding: 6px 0;
+
+    border: none;
+
+    background: none;
+    color: #6b7280;
+
+    font-size: 14px;
+    font-weight: 500;
+
+    cursor: pointer;
+
+    transition: color 0.2s;
+}
+
+.section-header button:hover {
+    color: #2563eb;
+}
+
+
+/* ==============================
+   Holding List
+   ============================== */
+
+.holding-list {
+    overflow: hidden;
+
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+
+    background-color: #ffffff;
+}
+
+.holding-item {
+    padding: 20px 24px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    border-bottom: 1px solid #f1f3f5;
+
+    cursor: pointer;
+
+    transition: background-color 0.2s;
+}
+
+.holding-item:last-child {
+    border-bottom: none;
+}
+
+.holding-item:hover {
+    background-color: #f8f9fb;
+}
+
+
+/* 종목명 / 종목코드 */
+
+.holding-item > div:first-child {
+    display: flex;
+    flex-direction: column;
+
+    gap: 5px;
+}
+
+.holding-item > div:first-child strong {
+    color: #111827;
+
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.holding-item > div:first-child span {
+    color: #9ca3af;
+
+    font-size: 13px;
+}
+
+
+/* 가격 / 수량 / 손익 */
+
+.holding-item > div:last-child {
+    display: flex;
+    align-items: center;
+
+    gap: 32px;
+}
+
+.holding-item > div:last-child span,
+.holding-item > div:last-child strong {
+    min-width: 90px;
+
+    font-size: 14px;
+    text-align: right;
+}
+
+.holding-item > div:last-child span {
+    color: #374151;
+}
+
+.holding-item > div:last-child strong {
+    color: #2563eb;
+
+    font-weight: 600;
+}
+
+
+/* ==============================
+   Stock List
+   ============================== */
+
+.stock-list {
+    overflow: hidden;
+
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+
+    background-color: #ffffff;
+}
+
+.stock-item {
+    padding: 20px 24px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    border-bottom: 1px solid #f1f3f5;
+
+    cursor: pointer;
+
+    transition: background-color 0.2s;
+}
+
+.stock-item:last-child {
+    border-bottom: none;
+}
+
+.stock-item:hover {
+    background-color: #f8f9fb;
+}
+
+.stock-item > strong {
+    color: #111827;
+
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.stock-item > div {
+    display: flex;
+    align-items: center;
+
+    gap: 32px;
+}
+
+.stock-item > div span {
+    min-width: 90px;
+
+    color: #374151;
+
+    font-size: 14px;
+    text-align: right;
+}
+
+.stock-item > div span:last-child {
+    color: #2563eb;
+
+    font-weight: 600;
+}
+
+
+/* ==============================
+   Responsive
+   ============================== */
+
+@media (max-width: 768px) {
+
+    /* Header */
+
+    .header-inner {
+        height: auto;
+
+        padding: 18px 20px;
+
+        gap: 20px;
+    }
+
+    .navigation {
+        gap: 16px;
+    }
+
+    .navigation a {
+        font-size: 14px;
+    }
+
+
+    /* Intro */
+
+    .main-intro {
+        min-height: 320px;
+
+        padding: 50px 20px;
+    }
+
+    .main-intro h1 {
+        font-size: 40px;
+    }
+
+    .main-intro-description {
+        font-size: 17px;
+    }
+
+
+    /* Features */
+
+    .features {
+        padding: 50px 20px;
+    }
+
+    .feature-list {
+        grid-template-columns: 1fr;
+    }
+
+
+    /* Dashboard */
+
+    .dashboard {
+        padding: 40px 20px 60px;
+    }
+
+    .dashboard-section {
+        margin-bottom: 40px;
+    }
+
+    .dashboard-section h1 {
+        font-size: 24px;
+    }
+
+    .dashboard-section h2 {
+        font-size: 20px;
+    }
+
+
+    /* Asset */
+
+    .asset-summary {
+        padding: 24px;
+    }
+
+    .total-asset {
+        margin-bottom: 24px;
+    }
+
+    .total-asset strong {
+        font-size: 30px;
+    }
+
+    .asset-detail {
+        grid-template-columns: 1fr;
+
+        gap: 20px;
+    }
+
+
+    /* Holding */
+
+    .holding-item {
+        align-items: flex-start;
+        flex-direction: column;
+
+        gap: 16px;
+    }
+
+    .holding-item > div:last-child {
+        width: 100%;
+
+        justify-content: space-between;
+
+        gap: 12px;
+    }
+
+    .holding-item > div:last-child span,
+    .holding-item > div:last-child strong {
+        min-width: 0;
+    }
+
+
+    /* Stock */
+
+    .stock-item > div {
+        gap: 16px;
+    }
+
+    .stock-item > div span {
+        min-width: 70px;
+    }
+}
+
+/* 계좌가 없는 경우 */
+.account-empty {
+    margin-top: 24px;
+    padding: 48px 32px;
+
+    background-color: #f8f9fb;
+
+    border-radius: 16px;
+
+    text-align: center;
+}
+
+.account-empty strong {
+    display: block;
+
+    font-size: 20px;
+    color: #191f28;
+}
+
+.account-empty p {
+    margin: 12px 0 24px;
+
+    font-size: 15px;
+    color: #6b7684;
+}
+
+.account-open-button {
+    padding: 12px 20px;
+
+    border: none;
+    border-radius: 10px;
+
+    background-color: #3182f6;
+    color: #ffffff;
+
+    font-size: 15px;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.account-open-button:hover {
+    background-color: #1b64da;
+}
+
+.account-status {
+    margin-top: 24px;
+    padding: 40px;
+
+    text-align: center;
+
+    color: #6b7684;
+}
+
+/* 보유 종목 없음 */
+.holding-empty {
+    padding: 40px 20px;
+
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+
+    text-align: center;
+}
+
+.holding-empty p {
+    margin: 0;
+
+    color: #6b7684;
+
+    font-size: 15px;
+}
+
+.profile-menu {
+    position: relative;
+}
+
+.profile-button {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    padding: 8px 10px;
+
+    border: none;
+    background: transparent;
+
+    font-size: 14px;
+    font-weight: 600;
+    color: #111827;
+
+    cursor: pointer;
+}
+
+.profile-arrow {
+    font-size: 9px;
+    color: #9ca3af;
+}
+
+.profile-dropdown {
+    position: absolute;
+
+    top: calc(100% + 10px);
+    right: 0;
+
+    width: 180px;
+
+    padding: 8px;
+
+    background: white;
+
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+
+    z-index: 100;
+}
+
+.profile-dropdown button {
+    width: 100%;
+
+    padding: 11px 12px;
+
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+
+    text-align: left;
+
+    font-size: 14px;
+    color: #374151;
+
+    cursor: pointer;
+}
+
+.profile-dropdown button:hover {
+    background: #f3f4f6;
+}
+
+.profile-divider {
+    height: 1px;
+
+    margin: 6px 4px;
+
+    background: #e5e7eb;
+}
+
+.profile-dropdown .withdraw-button {
+    color: #dc2626;
 }
