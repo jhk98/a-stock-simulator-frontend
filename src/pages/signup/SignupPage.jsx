@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './SignupPage.css';
+import API_BASE_URL from "../../config/api.js";
 
 function SignupPage() {
 
@@ -69,7 +70,7 @@ function SignupPage() {
 
         try {
 
-            const response = await fetch('http://localhost:8080/members', {
+            const response = await fetch(`${API_BASE_URL}/members`, {
                 method: 'POST',
 
                 headers: {

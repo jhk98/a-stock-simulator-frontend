@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import './MainPage.css';
+import API_BASE_URL from "../../config/api.js";
 
 function MainPage() {
 
@@ -28,7 +29,7 @@ function MainPage() {
 
             try {
                 const response = await fetch(
-                    `http://localhost:8080/accounts?memberId=${loginUser.memberId}`
+                    `${API_BASE_URL}/accounts?memberId=${loginUser.memberId}`
                 );
 
                 // 계좌가 없는 회원
@@ -61,7 +62,7 @@ function MainPage() {
 
     const handleCreateAccount = async () => {
         try {
-            const response = await fetch('http://localhost:8080/accounts', {
+            const response = await fetch(`${API_BASE_URL}/accounts`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -82,7 +83,7 @@ function MainPage() {
 
             // 생성된 계좌 정보 다시 조회
             const accountResponse = await fetch(
-                `http://localhost:8080/accounts/${result.id}`
+                `${API_BASE_URL}/accounts/${result.id}`
             );
 
             if (!accountResponse.ok) {
