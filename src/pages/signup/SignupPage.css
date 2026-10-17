@@ -1,6 +1,7 @@
-/* ==============================
-   Signup Page
-   ============================== */
+/* ============================================================
+   1. Signup Page
+   회원가입 페이지 전체 배경 및 배치
+   ============================================================ */
 
 .signup-page {
     width: 100%;
@@ -13,12 +14,14 @@
     padding: 48px 24px;
 
     background-color: #f8f9fb;
+    box-sizing: border-box;
 }
 
 
-/* ==============================
-   Signup Container
-   ============================== */
+/* ============================================================
+   2. Signup Container
+   회원가입 입력 폼을 감싸는 카드
+   ============================================================ */
 
 .signup-container {
     width: 100%;
@@ -32,12 +35,14 @@
     border-radius: 16px;
 
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+
+    box-sizing: border-box;
 }
 
 
-/* ==============================
-   Logo
-   ============================== */
+/* ============================================================
+   3. Logo
+   ============================================================ */
 
 .signup-logo {
     display: block;
@@ -52,10 +57,14 @@
     text-decoration: none;
 }
 
+.signup-logo:hover {
+    color: #1d4ed8;
+}
 
-/* ==============================
-   Title
-   ============================== */
+
+/* ============================================================
+   4. Title & Description
+   ============================================================ */
 
 .signup-container h1 {
     margin: 0 0 10px;
@@ -78,9 +87,9 @@
 }
 
 
-/* ==============================
-   Signup Form
-   ============================== */
+/* ============================================================
+   5. Signup Form
+   ============================================================ */
 
 .signup-form {
     display: flex;
@@ -90,9 +99,10 @@
 }
 
 
-/* ==============================
-   Input Group
-   ============================== */
+/* ============================================================
+   6. Input Group
+   각 입력 항목의 라벨과 입력 필드
+   ============================================================ */
 
 .input-group {
     display: flex;
@@ -109,9 +119,9 @@
 }
 
 
-/* ==============================
-   Input
-   ============================== */
+/* ============================================================
+   7. Common Input
+   ============================================================ */
 
 .input-group input {
     width: 100%;
@@ -155,9 +165,85 @@
 }
 
 
-/* ==============================
-   Email
-   ============================== */
+/* ============================================================
+   8. Action Row
+   입력창 + 중복 확인 / 인증 확인 버튼
+   ============================================================ */
+
+.signup-action-row {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+}
+
+.signup-action-row input {
+    flex: 1;
+    min-width: 0;
+    width: 100%;
+}
+
+
+/* ============================================================
+   9. Action Button
+   중복 확인 / 이메일 인증 관련 버튼
+   ============================================================ */
+
+.signup-action-button {
+    height: 48px;
+
+    padding: 0 16px;
+
+    flex-shrink: 0;
+
+    border: 1px solid #2563eb;
+    border-radius: 8px;
+
+    background-color: #ffffff;
+    color: #2563eb;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+            background-color 0.2s,
+            border-color 0.2s,
+            color 0.2s;
+}
+
+.signup-action-button:hover:not(:disabled) {
+    background-color: #eff6ff;
+    border-color: #1d4ed8;
+    color: #1d4ed8;
+}
+
+.signup-action-button:active:not(:disabled) {
+    background-color: #dbeafe;
+}
+
+.signup-action-button:disabled {
+    border-color: #d1d5db;
+
+    background-color: #f9fafb;
+    color: #9ca3af;
+
+    cursor: not-allowed;
+}
+
+/* 한 줄 전체 너비를 사용하는 버튼 */
+.signup-full-button {
+    width: 100%;
+}
+
+
+/* ============================================================
+   10. Email Input Group
+   이메일 아이디 @ 도메인 선택
+   ============================================================ */
 
 .email-input-group {
     width: 100%;
@@ -221,40 +307,20 @@
     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
+.email-input-group select:disabled {
+    background-color: #f3f4f6;
+    color: #9ca3af;
 
-/* ==============================
-   Resident Registration Number
-   ============================== */
-
-.rgst-number-group {
-    width: 100%;
-
-    display: flex;
-    align-items: center;
-
-    gap: 10px;
-}
-
-.rgst-number-group input {
-    flex: 1;
-
-    min-width: 0;
-}
-
-.rgst-number-group span {
-    flex-shrink: 0;
-
-    color: #6b7280;
-
-    font-size: 16px;
-    font-weight: 500;
+    cursor: not-allowed;
 }
 
 
-/* ==============================
-   Input Message
-   ============================== */
+/* ============================================================
+   11. Input Messages
+   입력값 검증 및 인증 결과 메시지
+   ============================================================ */
 
+/* 오류 메시지 */
 .input-error,
 .password-mismatch {
     margin: 2px 0 0;
@@ -266,6 +332,7 @@
     line-height: 1.4;
 }
 
+/* 성공 메시지 */
 .password-match {
     margin: 2px 0 0;
 
@@ -277,9 +344,10 @@
 }
 
 
-/* ==============================
-   Signup Error
-   ============================== */
+/* ============================================================
+   12. Signup Error
+   회원가입 요청 실패 및 전체 입력 오류
+   ============================================================ */
 
 .signup-error {
     margin: -4px 0 0;
@@ -292,9 +360,10 @@
 }
 
 
-/* ==============================
-   Signup Button
-   ============================== */
+/* ============================================================
+   13. Signup Submit Button
+   회원가입 최종 제출 버튼
+   ============================================================ */
 
 .signup-button {
     width: 100%;
@@ -318,18 +387,25 @@
             transform 0.1s;
 }
 
-.signup-button:hover {
+.signup-button:hover:not(:disabled) {
     background-color: #1d4ed8;
 }
 
-.signup-button:active {
+.signup-button:active:not(:disabled) {
     transform: translateY(1px);
 }
 
+.signup-button:disabled {
+    background-color: #93c5fd;
 
-/* ==============================
-   Signup Footer
-   ============================== */
+    cursor: not-allowed;
+}
+
+
+/* ============================================================
+   14. Signup Footer
+   로그인 페이지 이동 링크
+   ============================================================ */
 
 .signup-footer {
     display: flex;
@@ -357,9 +433,10 @@
 }
 
 
-/* ==============================
-   Responsive
-   ============================== */
+/* ============================================================
+   15. Responsive
+   모바일 및 작은 화면 대응
+   ============================================================ */
 
 @media (max-width: 600px) {
 
@@ -375,6 +452,11 @@
         font-size: 26px;
     }
 
+    .signup-description {
+        font-size: 14px;
+    }
+
+    /* 이메일 입력창은 작은 화면에서 줄바꿈 허용 */
     .email-input-group {
         flex-wrap: wrap;
     }
@@ -389,5 +471,23 @@
 
     .email-input-group select {
         width: 100%;
+    }
+
+    /* 중복 확인 및 인증 버튼 */
+    .signup-action-button {
+        padding: 0 12px;
+        font-size: 13px;
+    }
+
+    .signup-action-row {
+        gap: 6px;
+    }
+
+    .signup-action-row input {
+        min-width: 0;
+    }
+
+    .signup-footer {
+        flex-wrap: wrap;
     }
 }
