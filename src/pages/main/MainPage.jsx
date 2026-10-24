@@ -1,600 +1,307 @@
-import { useEffect, useState } from 'react';
-
-import './MainPage.css';
-
-import API_BASE_URL from '../../config/api.js';
-import Header from '../../components/common/Header';
-
-// 공통 JWT 인증 상태 관리
-import { useAuth } from '../../auth/AuthContext.jsx';
-
-function MainPage() {
-
-    // ============================================================
-    // 1. 로그인 상태 및 계좌 상태
-    // ============================================================
-
-    /*
-     * 기존에는 localStorage에서 loginUser를 가져왔지만,
-     * 이제 AuthContext에서 공통 로그인 상태를 가져온다.
-     *
-     * loginUser   : 로그인한 회원 정보
-     * accessToken : JWT Access Token
-     * authLoading : 새로고침 후 로그인 복원 진행 여부
-     * logout      : 서버 로그아웃 및 인증 상태 초기화
-     */
-    const {
-        loginUser,
-        accessToken,
-        authLoading,
-        logout
-    } = useAuth();
-
-    // 계좌 정보
-    const [account, setAccount] = useState(null);
-
-    // 계좌 조회 진행 상태
-    const [accountLoading, setAccountLoading] = useState(false);
-
-    // 계좌 개설 진행 상태
-    const [accountCreating, setAccountCreating] = useState(false);
-
-
-    // ============================================================
-    // 2. 로그인한 회원의 계좌 조회
-    // ============================================================
-
-    useEffect(() => {
-
-        // 로그인 상태 복원 중에는 계좌 조회를 진행하지 않는다.
-        if (authLoading) {
-            return;
-        }
-
-        // 로그인하지 않았거나 회원 ID가 없는 경우 계좌 조회 중단
-        if (!loginUser || !accessToken || loginUser.memberId == null) {
-            setAccount(null);
-            setAccountLoading(false);
-
-            if (loginUser && accessToken && loginUser.memberId == null) {
-                console.error(
-                    "로그인 사용자 정보에 memberId가 없습니다.",
-                    loginUser
-                );
-            }
-
-            return;
-        }
-
-        // 이전 API 요청을 취소하기 위한 컨트롤러
-        const controller = new AbortController();
-
-        const fetchAccount = async () => {
-
-            setAccountLoading(true);
-
-            try {
-
-                /*
-                 * Spring Boot 계좌 조회 API
-                 *
-                 * JWT Access Token을 Authorization 헤더로 전달한다.
-                 */
-                const response = await fetch(
-                    `${API_BASE_URL}/accounts?memberId=${loginUser.memberId}`,
-                    {
-                        method: 'GET',
-
-                        headers: {
-                            Authorization: `Bearer ${accessToken}`
-                        },
-
-                        signal: controller.signal
-                    }
-                );
-
-                // 계좌가 없는 회원
-                if (response.status === 404) {
-                    setAccount(null);
-                    return;
-                }
-
-                // JWT 인증 오류
-                if (response.status === 401) {
-                    throw new Error('로그인 인증이 만료되었습니다.');
-                }
-
-                // 그 외 서버 오류
-                if (!response.ok) {
-                    throw new Error('계좌 정보를 불러오지 못했습니다.');
-                }
-
-                // 계좌 조회 성공
-                const data = await response.json();
-
-                if (!controller.signal.aborted) {
-                    setAccount(data);
-                }
-
-            } catch (error) {
-
-                // 요청이 취소된 경우 오류로 처리하지 않는다.
-                if (error.name === 'AbortError') {
-                    return;
-                }
-
-                console.error('계좌 조회 실패:', error);
-
-            } finally {
-
-                if (!controller.signal.aborted) {
-                    setAccountLoading(false);
-                }
-            }
-        };
-
-        fetchAccount();
-
-        /*
-         * 컴포넌트가 사라지거나 인증 상태가 변경되면
-         * 이전에 진행 중이던 계좌 조회 요청을 취소한다.
-         */
-        return () => {
-            controller.abort();
-        };
-
-    }, [loginUser, accessToken, authLoading]);
-
-
-    // ============================================================
-    // 3. 계좌 개설
-    // ============================================================
-
-    const handleCreateAccount = async () => {
-
-        // 로그인 여부 확인
-        if (!loginUser || !accessToken) {
-            alert('로그인이 필요합니다.');
-            return;
-        }
-
-        // 중복 요청 방지
-        if (accountCreating) {
-            return;
-        }
-
-        setAccountCreating(true);
-
-        try {
-
-            // ----------------------------------------------------
-            // 3-1. 계좌 생성 API
-            // ----------------------------------------------------
-
-            const response = await fetch(`${API_BASE_URL}/accounts`, {
-                method: 'POST',
-
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${accessToken}`
-                },
-
-                body: JSON.stringify({
-                    memberId: loginUser.memberId
-                })
-            });
-
-            if (response.status === 401) {
-                throw new Error('로그인 인증이 만료되었습니다.');
-            }
-
-            if (!response.ok) {
-                throw new Error('계좌 개설에 실패했습니다.');
-            }
-
-            // 계좌 생성 결과
-            const result = await response.json();
-
-            console.log('생성된 accountId:', result.id);
-
-
-            // ----------------------------------------------------
-            // 3-2. 생성된 계좌 정보 다시 조회
-            // ----------------------------------------------------
-
-            const accountResponse = await fetch(
-                `${API_BASE_URL}/accounts/${result.id}`,
-                {
-                    method: 'GET',
-
-                    headers: {
-                        Authorization: `Bearer ${accessToken}`
-                    }
-                }
-            );
-
-            if (!accountResponse.ok) {
-                throw new Error('생성된 계좌 정보를 불러오지 못했습니다.');
-            }
-
-            const accountData = await accountResponse.json();
-
-
-            // ----------------------------------------------------
-            // 3-3. 화면의 계좌 상태 갱신
-            // ----------------------------------------------------
-
-            setAccount(accountData);
-
-        } catch (error) {
-
-            console.error('계좌 개설 실패:', error);
-            alert(error.message);
-
-        } finally {
-
-            setAccountCreating(false);
-        }
-    };
-
-
-    // ============================================================
-    // 4. 로그아웃
-    // ============================================================
-
-    const handleLogout = async () => {
-
-        try {
-
-            /*
-             * AuthContext의 logout() 호출
-             *
-             * 1. CSRF Token 조회
-             * 2. POST /auth/logout 요청
-             * 3. 서버 Refresh Token 무효화
-             * 4. React 로그인 상태 초기화
-             */
-            await logout();
-
-        } catch (error) {
-
-            console.error('서버 로그아웃 실패:', error);
-
-            alert(
-                '서버 로그아웃 처리에 실패했습니다. 다시 시도해주세요.'
-            );
-        }
-    };
-
-
-    // ============================================================
-    // 5. 로그인 상태 복원 중 화면
-    // ============================================================
-
-    /*
-     * 페이지를 새로고침하면 AuthContext에서
-     * Refresh Token으로 로그인 상태 복원을 시도한다.
-     *
-     * 복원이 끝나기 전에는 비로그인 메인화면을 표시하지 않는다.
-     */
-    if (authLoading) {
-        return (
-            <div className="main-page">
-                <main>
-                    <div className="account-status">
-                        <p>로그인 상태를 확인하는 중입니다...</p>
-                    </div>
-                </main>
-            </div>
-        );
-    }
-
-
-    // ============================================================
-    // 6. 메인페이지 화면
-    // ============================================================
+import { useRef, useState } from "react";
+import { Link } from "react-router-dom";
+
+import Header from "../../components/common/Header.jsx";
+import { useAuth } from "../../auth/AuthContext.jsx";
+import {
+    apiJson,
+    money,
+    quoteTime,
+    signedMoney,
+    useApiPolling
+} from "../../stock/simulationApi.js";
+
+import "./MainPage.css";
+
+function amountClass(value) {
+    if (Number(value) > 0) return "trade-up";
+    if (Number(value) < 0) return "trade-down";
+    return "";
+}
+
+// 거래대금 상위 종목을 표시한다.
+function PopularStocks() {
+    const { data, error, loading } = useApiPolling("/market/popular", 30000);
 
     return (
-        <div className="main-page">
-
-            {/* ====================================================
-                Header
-                ==================================================== */}
-
-            <Header
-                loginUser={loginUser}
-                onLogout={handleLogout}
-            />
-
-
-            {/* ====================================================
-                Main Content
-                ==================================================== */}
-
-            <main>
-
-                {loginUser ? (
-
-                    // ============================================
-                    // 로그인한 회원의 메인페이지
-                    // ============================================
-
-                    <div className="dashboard">
-
-                        {/* ========================================
-                            내 투자 현황
-                            ======================================== */}
-
-                        <section className="dashboard-section">
-
-                            <h1>{loginUser.name}님의 투자 현황</h1>
-
-                            {accountLoading ? (
-
-                                // 계좌 조회 중
-                                <div className="account-status">
-                                    <p>계좌 정보를 불러오는 중입니다...</p>
-                                </div>
-
-                            ) : account ? (
-
-                                // 계좌가 있는 경우
-                                <div className="asset-summary">
-
-                                    <div className="total-asset">
-                                        <span>총 자산</span>
-                                        <strong>10,000,000원</strong>
-                                    </div>
-
-                                    <div className="asset-detail">
-
-                                        <div>
-                                            <span>예수금</span>
-                                            <strong>7,000,000원</strong>
-                                        </div>
-
-                                        <div>
-                                            <span>주식 평가금액</span>
-                                            <strong>3,000,000원</strong>
-                                        </div>
-
-                                        <div>
-                                            <span>평가손익</span>
-                                            <strong>+150,000원</strong>
-                                        </div>
-
-                                    </div>
-                                </div>
-
-                            ) : (
-
-                                // 계좌가 없는 경우
-                                <div className="account-empty">
-
-                                    <div>
-                                        <strong>
-                                            아직 개설된 계좌가 없습니다.
-                                        </strong>
-
-                                        <p>
-                                            모의투자를 시작하려면 계좌를 개설해주세요.
-                                        </p>
-
-                                        <button
-                                            type="button"
-                                            className="account-open-button"
-                                            onClick={handleCreateAccount}
-                                            disabled={accountCreating}
-                                        >
-                                            {accountCreating
-                                                ? '계좌 개설 중...'
-                                                : '계좌 개설하기'}
-                                        </button>
-                                    </div>
-
-                                </div>
-
-                            )}
-
-                        </section>
-
-
-                        {/* ========================================
-                            내 보유 종목
-                            ======================================== */}
-
-                        <section className="dashboard-section">
-
-                            <div className="section-header">
-
-                                <h2>내 보유 종목</h2>
-
-                                {account && (
-                                    <button type="button">
-                                        전체보기
-                                    </button>
-                                )}
-
-                            </div>
-
-                            {account ? (
-
-                                <div className="holding-list">
-
-                                    <div className="holding-item">
-
-                                        <div>
-                                            <strong>삼성전자</strong>
-                                            <span>005930</span>
-                                        </div>
-
-                                        <div>
-                                            <span>70,000원</span>
-                                            <span>10주</span>
-                                            <strong>+30,000원</strong>
-                                        </div>
-
-                                    </div>
-
-                                    <div className="holding-item">
-
-                                        <div>
-                                            <strong>NAVER</strong>
-                                            <span>035420</span>
-                                        </div>
-
-                                        <div>
-                                            <span>210,000원</span>
-                                            <span>3주</span>
-                                            <strong>-15,000원</strong>
-                                        </div>
-
-                                    </div>
-
-                                </div>
-
-                            ) : (
-
-                                <div className="holding-empty">
-                                    <p>보유 중인 종목이 없습니다.</p>
-                                </div>
-
-                            )}
-
-                        </section>
-
-
-                        {/* ========================================
-                            주요 종목
-                            ======================================== */}
-
-                        <section className="dashboard-section">
-
-                            <div className="section-header">
-
-                                <h2>주요 종목</h2>
-
-                                <button type="button">
-                                    전체보기
-                                </button>
-
-                            </div>
-
-                            <div className="stock-list">
-
-                                <div className="stock-item">
-
-                                    <strong>삼성전자</strong>
-
-                                    <div>
-                                        <span>70,000원</span>
-                                        <span>+1.24%</span>
-                                    </div>
-
-                                </div>
-
-                                <div className="stock-item">
-
-                                    <strong>SK하이닉스</strong>
-
-                                    <div>
-                                        <span>180,000원</span>
-                                        <span>+2.15%</span>
-                                    </div>
-
-                                </div>
-
-                                <div className="stock-item">
-
-                                    <strong>NAVER</strong>
-
-                                    <div>
-                                        <span>210,000원</span>
-                                        <span>-0.85%</span>
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        </section>
-
-                    </div>
-
-                ) : (
-
-                    // ============================================
-                    // 로그인하지 않은 방문자의 메인페이지
-                    // ============================================
-
-                    <>
-
-                        {/* 서비스 소개 */}
-                        <section className="main-intro">
-
-                            <div className="main-intro-content">
-
-                                <p className="main-intro-label">
-                                    STOCK SIMULATOR
-                                </p>
-
-                                <h1>
-                                    투자 경험을 쌓는
-                                    <br />
-                                    가장 쉬운 방법
-                                </h1>
-
-                                <p className="main-intro-description">
-                                    실제 주식 시장을 기반으로
-                                    <br />
-                                    부담 없이 투자를 시작해보세요.
-                                </p>
-
-                            </div>
-
-                        </section>
-
-
-                        {/* 서비스 기능 소개 */}
-                        <section className="features">
-
-                            <h2>모의투자 서비스</h2>
-
-                            <div className="feature-list">
-
-                                <div>
-                                    <h3>실시간 시세</h3>
-                                    <p>
-                                        주식 종목의 가격과 변동을 확인합니다.
-                                    </p>
-                                </div>
-
-                                <div>
-                                    <h3>가상 투자</h3>
-                                    <p>
-                                        가상 자산으로 주식을 사고팔 수 있습니다.
-                                    </p>
-                                </div>
-
-                                <div>
-                                    <h3>투자 현황</h3>
-                                    <p>
-                                        보유 종목과 투자 결과를 확인합니다.
-                                    </p>
-                                </div>
-
-                            </div>
-
-                        </section>
-
-                    </>
-
-                )}
-
-            </main>
-
-        </div>
+        <section className="ds-card">
+            <div className="ds-section-heading">
+                <div>
+                    <p className="ds-eyebrow">MARKET ACTIVITY</p>
+                    <h2>거래대금 상위</h2>
+                </div>
+                <Link to="/stocks">전체 종목 보기 →</Link>
+            </div>
+
+            <p className="ds-muted">
+                키움 KRX 거래대금 순위 · 관리종목 제외 · 등록된 코스피·코스닥 종목
+            </p>
+
+            {loading && <p role="status">순위를 확인하고 있습니다.</p>}
+            {error && <p className="ds-alert ds-error" role="alert">{error}</p>}
+            {data?.warning && <p className="ds-alert">{data.warning}</p>}
+
+            <div className="ds-stock-grid">
+                {data?.items.slice(0, 6).map(stock => (
+                    <Link
+                        className="popular-card"
+                        key={stock.stockCode}
+                        to={`/trade?code=${encodeURIComponent(stock.stockCode)}`}
+                    >
+                        <div className="popular-top">
+                            <span className="popular-rank">#{stock.rank}</span>
+                            <span className="ds-badge">{stock.market}</span>
+                        </div>
+
+                        {/* 종목코드는 출력하지 않는다. */}
+                        <h3>{stock.stockName}</h3>
+                        <strong className="ds-stock-price">
+                            {money(stock.currentPrice)}
+                        </strong>
+                        <span className={amountClass(stock.changeRate)}>
+                            {Number(stock.changeRate) > 0 ? "+" : ""}
+                            {Number(stock.changeRate).toFixed(2)}%
+                        </span>
+                        <p className="ds-muted">
+                            거래대금{" "}
+                            {Number(stock.tradeValueMillion).toLocaleString("ko-KR")}
+                            백만원
+                        </p>
+                    </Link>
+                ))}
+            </div>
+
+            {data?.fetchedAt && (
+                <p className="ds-muted">순위 수집: {quoteTime(data.fetchedAt)}</p>
+            )}
+        </section>
     );
 }
 
-export default MainPage;
+// 계좌 잔액과 보유종목을 보여주는 투자현황 영역.
+function InvestmentOverview() {
+    const { authFetch, loginUser } = useAuth();
+    const { data, error, loading, refresh } =
+        useApiPolling("/simulation/overview");
+
+    const [opening, setOpening] = useState(false);
+    const [creating, setCreating] = useState(false);
+    const [message, setMessage] = useState("");
+    const busy = useRef(false);
+
+    async function createAccount() {
+        if (busy.current) return;
+
+        busy.current = true;
+        setCreating(true);
+        setMessage("");
+
+        try {
+            // 현재 백엔드의 계좌 개설 API를 유지한다.
+            await apiJson(authFetch, "/dashboard/account", { method: "POST" });
+            setOpening(false);
+            setMessage("모의계좌가 준비되었습니다.");
+            refresh();
+        } catch (requestError) {
+            setMessage(requestError.message);
+        } finally {
+            busy.current = false;
+            setCreating(false);
+        }
+    }
+
+    return (
+        <main className="ds-container">
+            <div className="ds-heading">
+                <div>
+                    <p className="ds-eyebrow">MY INVESTMENT</p>
+                    <h1>{loginUser.name}님의 투자 현황</h1>
+                    <p className="ds-muted">
+                        실제 시장 가격으로 경험하는 가상 투자.
+                    </p>
+                </div>
+                <button
+                    type="button"
+                    className="ds-button ds-secondary"
+                    onClick={refresh}
+                >
+                    화면 갱신
+                </button>
+            </div>
+
+            {error && <p className="ds-alert ds-error" role="alert">{error}</p>}
+            {message && <p className="ds-alert" role="status">{message}</p>}
+            {loading && <p role="status">투자 정보를 조회하고 있습니다.</p>}
+
+            {data && !data.account && (
+                <section className="ds-card account-intro">
+                    <p className="ds-eyebrow">START YOUR PORTFOLIO</p>
+                    <h2>가상 자금 {money(data.initialBalance)}으로 시작하세요</h2>
+                    <p className="ds-muted">
+                        실제 계좌 연결 없이 회원당 하나의 모의계좌를 개설합니다.
+                    </p>
+
+                    {opening ? (
+                        <div className="ds-actions">
+                            <button
+                                type="button"
+                                className="ds-button"
+                                disabled={creating}
+                                onClick={createAccount}
+                            >
+                                {creating ? "개설 중..." : "모의계좌 생성하기"}
+                            </button>
+                            <button
+                                type="button"
+                                className="ds-button ds-secondary"
+                                disabled={creating}
+                                onClick={() => setOpening(false)}
+                            >
+                                돌아가기
+                            </button>
+                        </div>
+                    ) : (
+                        <button
+                            type="button"
+                            className="ds-button"
+                            onClick={() => setOpening(true)}
+                        >
+                            계좌 개설하기 →
+                        </button>
+                    )}
+                </section>
+            )}
+
+            {data?.account && (
+                <section className="ds-card">
+                    <div className="ds-section-heading">
+                        <h2>내 모의계좌</h2>
+                        <span className="ds-badge">가상 자금</span>
+                    </div>
+                    <p className="ds-account-number">{data.account.accountNum}</p>
+                    <div className="ds-summary">
+                        <div>
+                            <span>예수금</span>
+                            <strong>{money(data.account.deposit)}</strong>
+                        </div>
+                        <div>
+                            <span>총 평가자산</span>
+                            <strong>{money(data.totalAssets)}</strong>
+                        </div>
+                        <div>
+                            <span>초기자금 대비 손익</span>
+                            <strong className={amountClass(data.totalProfit)}>
+                                {signedMoney(data.totalProfit)}
+                            </strong>
+                        </div>
+                        <div>
+                            <span>초기자금</span>
+                            <strong>{money(data.initialBalance)}</strong>
+                        </div>
+                    </div>
+
+                    {!data.valuationComplete && (
+                        <p className="ds-muted">
+                            시세가 없거나 수집 후 2분이 지난 보유 종목이 있어
+                            전체 평가금액을 표시하지 않습니다.
+                        </p>
+                    )}
+                </section>
+            )}
+
+            {data && (
+                <section className="ds-card">
+                    <div className="ds-section-heading">
+                        <h2>내 보유 종목</h2>
+                        <Link to="/orders">주문내역 →</Link>
+                    </div>
+
+                    {data.holdings.length === 0 ? (
+                        <div className="ds-empty">
+                            <p>아직 보유 중인 종목이 없습니다.</p>
+                            <Link to="/stocks" className="ds-button ds-secondary">
+                                종목 둘러보기
+                            </Link>
+                        </div>
+                    ) : (
+                        <div className="ds-table-scroll">
+                            <table className="ds-table">
+                                <thead>
+                                <tr>
+                                    <th>종목</th>
+                                    <th>수량</th>
+                                    <th>평균 매입가</th>
+                                    <th>저장 시세</th>
+                                    <th>평가손익</th>
+                                    <th>수집 시각</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {data.holdings.map(item => (
+                                    <tr key={item.stockCode}>
+                                        <td>
+                                            {/* 식별자는 링크에만 사용한다. */}
+                                            <Link
+                                                to={`/trade?code=${encodeURIComponent(item.stockCode)}`}
+                                            >
+                                                <strong>{item.stockName}</strong>
+                                            </Link>
+                                        </td>
+                                        <td>{item.quantity.toLocaleString()}주</td>
+                                        <td>{money(item.avgPrice)}</td>
+                                        <td>
+                                            {money(item.quote?.currentPrice)}
+                                            {!item.fresh && <small>갱신 필요</small>}
+                                        </td>
+                                        <td className={amountClass(item.unrealizedProfit)}>
+                                            {signedMoney(item.unrealizedProfit)}
+                                        </td>
+                                        <td>{quoteTime(item.quote?.fetchedAt)}</td>
+                                    </tr>
+                                ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    )}
+                </section>
+            )}
+
+            <PopularStocks />
+
+            <p className="ds-muted">
+                시세는 주기적으로 수집됩니다.
+                모의투자 손익에는 수수료와 세금이 포함되지 않습니다.
+            </p>
+        </main>
+    );
+}
+
+export default function MainPage() {
+    const { isAuthenticated, loginUser } = useAuth();
+
+    return (
+        <div className="ds-page">
+            <Header />
+
+            {isAuthenticated ? (
+                <InvestmentOverview key={loginUser.memberId} />
+            ) : (
+                <main className="ds-container">
+                    <section className="ds-card ds-intro account-intro">
+                        <p className="ds-eyebrow">YOUR FIRST INVESTMENT</p>
+                        <h1>실제 시장에서 배우는<br />나만의 모의투자</h1>
+                        <p className="ds-muted">
+                            가상 자금 1억 원으로 코스피·코스닥 투자를 경험하세요.
+                        </p>
+                        <div className="ds-actions">
+                            <Link to="/login" className="ds-button">시작하기 →</Link>
+                            <Link to="/signup" className="ds-button ds-secondary">
+                                회원가입
+                            </Link>
+                        </div>
+                    </section>
+                </main>
+            )}
+        </div>
+    );
+}
