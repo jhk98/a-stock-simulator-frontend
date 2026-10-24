@@ -1,0 +1,217 @@
+/* 종목 화면 전용 배치 */
+.stock-browser-page .stock-toolbar {
+    display: grid;
+    gap: 18px;
+}
+
+.stock-browser-page .stock-market-tabs {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+/* 공통 테마의 font 지정에 덮어쓰이지 않도록 범위를 명확히 한다. */
+:root .stock-browser-page .stock-market-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 76px;
+    height: 40px;
+    padding: 0 16px;
+    border: 1px solid var(--border, #dfe6f1);
+    border-radius: 10px;
+    background: var(--surface, #fff);
+    color: var(--muted, #65748b);
+    font: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+:root .stock-browser-page .stock-market-button:hover {
+    background: var(--soft, #f0f4fb);
+    color: var(--accent, #3654ce);
+}
+
+:root .stock-browser-page .stock-market-button[aria-pressed="true"] {
+    border-color: var(--accent, #3654ce);
+    background: var(--accent-soft, #edf1ff);
+    color: var(--accent, #3654ce);
+}
+
+.stock-browser-page .stock-toolbar-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px 24px;
+}
+
+/* 입력칸 최대 260px, 버튼 두 개는 고정 폭 */
+.stock-browser-page .stock-search-form {
+    display: grid;
+    grid-template-columns: minmax(0, 260px) 64px 92px;
+    align-items: center;
+    gap: 8px;
+    width: min(100%, 432px);
+    min-width: 0;
+    margin: 0;
+}
+
+:root .stock-browser-page .stock-toolbar input,
+:root .stock-browser-page .stock-toolbar select {
+    box-sizing: border-box;
+    height: 44px;
+    min-height: 44px;
+    min-width: 0;
+    margin: 0;
+    padding: 0 12px;
+    border: 1px solid var(--border, #dfe6f1);
+    border-radius: 10px;
+    background: var(--surface, #fff);
+    color: var(--text, #17243c);
+    font: inherit;
+    font-size: 14px;
+    line-height: normal;
+}
+
+.stock-browser-page .stock-search-form input {
+    width: 100%;
+}
+
+.stock-browser-page .stock-search-form input::placeholder {
+    color: var(--muted, #65748b);
+}
+
+:root .stock-browser-page .stock-toolbar .ds-button {
+    box-sizing: border-box;
+    height: 44px;
+    min-height: 44px;
+    margin: 0;
+    padding: 0 12px;
+    font-size: 14px;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+.stock-browser-page .stock-list-options {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px 20px;
+}
+
+.stock-browser-page .stock-option {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    color: var(--muted, #65748b);
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+.stock-browser-page .stock-option select {
+    width: 116px;
+    cursor: pointer;
+}
+
+.stock-browser-page .stock-option:last-child select {
+    width: 92px;
+}
+
+.stock-browser-page .stock-sort-description {
+    margin: 0;
+}
+
+.stock-browser-page .stock-toolbar
+:is(button, input, select):focus-visible {
+    outline: 3px solid var(--accent, #3654ce);
+    outline-offset: 3px;
+}
+
+.stock-browser-page .stock-loading {
+    display: grid;
+    place-items: center;
+    min-height: 180px;
+    color: var(--muted, #65748b);
+}
+
+/* 좁은 화면에서는 표만 가로로 스크롤한다. */
+.stock-browser-page .stock-list-table {
+    min-width: 760px;
+}
+
+.stock-browser-page .stock-rate-up {
+    color: var(--up, #c7384b);
+}
+
+.stock-browser-page .stock-rate-down {
+    color: var(--down, #2860ce);
+}
+
+.stock-browser-page .stock-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 24px;
+}
+
+.stock-browser-page .stock-pagination > span {
+    padding: 0 8px;
+    color: var(--muted, #65748b);
+    font-size: 14px;
+    font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 960px) {
+    .stock-browser-page .stock-toolbar-row {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 600px) {
+    .stock-browser-page .stock-search-form {
+        width: 100%;
+        grid-template-columns: minmax(0, 1fr) 56px 80px;
+        gap: 6px;
+    }
+
+    :root .stock-browser-page .stock-toolbar .ds-button {
+        padding: 0 8px;
+        font-size: 13px;
+    }
+
+    :root .stock-browser-page .stock-toolbar input {
+        padding: 0 8px;
+        font-size: 13px;
+    }
+
+    .stock-browser-page .stock-list-options {
+        display: grid;
+        width: 100%;
+        gap: 10px;
+    }
+
+    .stock-browser-page .stock-option {
+        display: grid;
+        grid-template-columns: 80px minmax(0, 1fr);
+        gap: 12px;
+    }
+
+    .stock-browser-page .stock-option select,
+    .stock-browser-page .stock-option:last-child select {
+        width: 100%;
+    }
+
+    .stock-browser-page .stock-pagination .ds-button {
+        min-height: 40px;
+        padding: 8px 12px;
+        font-size: 13px;
+    }
+}
