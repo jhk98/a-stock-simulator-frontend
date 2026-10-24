@@ -1,0 +1,146 @@
+/* 회원정보 수정 화면 전용 스타일 */
+.member-page {
+    width: min(640px, calc(100% - 32px));
+    margin: 40px auto;
+}
+
+.member-card {
+    padding: 32px;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: var(--surface);
+    color: var(--text);
+    box-shadow: var(--shadow);
+}
+
+.member-card h1 {
+    margin: 0 0 8px;
+    font-size: 26px;
+}
+
+.member-description,
+.member-help {
+    color: var(--muted);
+}
+
+.member-description {
+    margin: 0 0 24px;
+}
+
+.member-help {
+    margin: 6px 0 0;
+    font-size: 13px;
+}
+
+.member-card fieldset {
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+/* 화면에는 제목이 있으므로 legend는 보조기기에 제공한다. */
+.member-card legend {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+}
+
+.member-summary {
+    display: grid;
+    gap: 12px;
+    padding: 18px;
+    margin: 0 0 24px;
+    border-radius: 10px;
+    background: var(--soft);
+}
+
+.member-summary > div {
+    display: grid;
+    grid-template-columns: 72px 1fr;
+    gap: 12px;
+}
+
+.member-summary dt {
+    color: var(--muted);
+}
+
+.member-summary dd {
+    margin: 0;
+    overflow-wrap: anywhere;
+}
+
+.member-card label {
+    display: block;
+    margin: 20px 0 8px;
+    font-weight: 600;
+}
+
+.member-card input {
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+}
+
+.member-email-row {
+    display: flex;
+    gap: 8px;
+}
+
+.member-card button {
+    padding: 10px 16px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--soft);
+    color: var(--text);
+    cursor: pointer;
+}
+
+.member-email-row button {
+    flex-shrink: 0;
+}
+
+.member-card button:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+}
+
+.member-card .member-save {
+    width: 100%;
+    margin-top: 28px;
+    border-color: var(--button);
+    background: var(--button);
+    color: #fff;
+    font-weight: 700;
+}
+
+.member-error,
+.member-success {
+    padding: 12px 14px;
+    border-radius: 10px;
+    overflow-wrap: anywhere;
+}
+
+.member-error {
+    border: 1px solid var(--error-border);
+    background: var(--error-bg);
+    color: var(--up);
+}
+
+.member-success {
+    border: 1px solid var(--border);
+    background: var(--soft);
+    color: var(--success);
+}
+
+@media (max-width: 480px) {
+    .member-card {
+        padding: 22px 18px;
+    }
+
+    .member-email-row {
+        flex-direction: column;
+    }
+}
